@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import { Layout } from 'antd';
 import Stats from './utils/stats';
-import clm from 'clmtrackr';
+import clm from './utils/c';
+// require('./utils/c');
 import 'antd/dist/antd.css';
 
 
@@ -16,23 +17,49 @@ class App extends Component {
     navigator.mediaDevices.getUserMedia({video: true, audio: false}).then(function(stream) {
       const url = URL.createObjectURL(stream);
       self.video.src = url;
-      const ctracker = new clm.tracker();
-      ctracker.init();
-      ctracker.start(self.video);
-      var canvasInput = document.getElementById('drawCanvas');
-      var cc = canvasInput.getContext('2d');
-      function drawLoop() {
-        requestAnimationFrame(drawLoop);
-        cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
-        ctracker.draw(canvasInput);
-      }
-      drawLoop();
     }, function(err) {
       throw err
     });
     this.showPerfermence();
-    console.log(clm);
-    
+
+    this.video.onloadedmetadata = () => {
+      this.video.play();
+      this.showClm();
+    }
+    this.video.onresize = () => {
+      this.adjustVideoProportions();
+      if (this.state && this.state.ctracker) {
+        this.state.ctracker.stop();
+        this.state.ctracker.reset();
+        this.state.ctracker.start(this.video);
+      }
+     
+    }
+  }
+
+  adjustVideoProportions() {
+    const vid = this.video;
+    const vid_height = vid.height;
+    const proportion = vid.videoWidth/vid.videoHeight;
+    const vid_width = Math.round(vid_height * proportion);
+    vid.width = vid_width;
+  }
+
+  showClm() {
+    const ctracker = new clm.tracker();
+    ctracker.init();
+    ctracker.start(this.video);
+    this.setState({
+      ctracker
+    });
+    var canvasInput = document.getElementById('drawCanvas');
+    var cc = canvasInput.getContext('2d');
+    function drawLoop() {
+      requestAnimationFrame(drawLoop);
+      cc.clearRect(0, 0, canvasInput.width, canvasInput.height);
+      ctracker.draw(canvasInput);
+    }
+    drawLoop();
   }
 
   showPerfermence() {
@@ -45,6 +72,9 @@ class App extends Component {
       requestAnimationFrame( animate );
     }
     requestAnimationFrame( animate ); 
+    document.addEventListener('clmtrackrIteration', function(event) {
+      stats.update();
+    }, false);
   }
 
   render() {
