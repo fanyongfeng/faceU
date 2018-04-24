@@ -3,7 +3,6 @@ import './App.css';
 import { Layout } from 'antd';
 import Stats from './utils/stats';
 import clm from './utils/c';
-// require('./utils/c');
 import 'antd/dist/antd.css';
 
 
@@ -20,38 +19,25 @@ class App extends Component {
     }, function(err) {
       throw err
     });
+    var ctracker = new clm.tracker();
+      ctracker.init();
+      ctracker.start(this.video);
     this.showPerfermence();
-
-    this.video.onloadedmetadata = () => {
-      this.video.play();
-      this.showClm();
-    }
-    this.video.onresize = () => {
-      this.adjustVideoProportions();
-      if (this.state && this.state.ctracker) {
-        this.state.ctracker.stop();
-        this.state.ctracker.reset();
-        this.state.ctracker.start(this.video);
+    function positionLoop() {
+      requestAnimationFrame(positionLoop);
+      var positions = ctracker.getCurrentPosition();
+      // do something with the positions ...
+      // print the positions
+      var positionString = "";
+      if (positions) {
+        for (var p = 0;p < 10;p++) {
+          positionString += "featurepoint "+p+" : ["+positions[p][0].toFixed(2)+","+positions[p][1].toFixed(2)+"]<br/>";
+        }
+        document.getElementById('positions').innerHTML = positionString;
       }
-     
     }
-  }
+    positionLoop();
 
-  adjustVideoProportions() {
-    const vid = this.video;
-    const vid_height = vid.height;
-    const proportion = vid.videoWidth/vid.videoHeight;
-    const vid_width = Math.round(vid_height * proportion);
-    vid.width = vid_width;
-  }
-
-  showClm() {
-    const ctracker = new clm.tracker();
-    ctracker.init();
-    ctracker.start(this.video);
-    this.setState({
-      ctracker
-    });
     var canvasInput = document.getElementById('drawCanvas');
     var cc = canvasInput.getContext('2d');
     function drawLoop() {
@@ -60,6 +46,13 @@ class App extends Component {
       ctracker.draw(canvasInput);
     }
     drawLoop();
+
+    this.video.onloadedmetadata = () => {
+      this.video.play();
+    }
+    this.video.onresize = () => {
+     
+    }
   }
 
   showPerfermence() {
