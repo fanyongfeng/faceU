@@ -15,7 +15,7 @@
   height: 100%;
   width: 100%;
 }
-#drawCanvas {
+#drawCanvas, #webgl {
   position: absolute;
   left: 0;
   top: 0;
@@ -29,6 +29,10 @@
   left: 0;
   opacity: 0.9;
   z-index: 100;
+}
+
+.mask-wrapper img {
+  display: none;
 }
 
 
