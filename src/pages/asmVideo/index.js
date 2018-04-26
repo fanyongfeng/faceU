@@ -16,12 +16,35 @@ class AsmVideo extends Component {
     const canvas   = document.getElementById("drawCanvas");
     const context = canvas.getContext("2d");
     this.context = context;
-    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-      self.asmvideo.src = window.URL.createObjectURL(stream);
-      self.asmvideo.play();
-      waitForSDK();
-      trackFaces();
-    });
+    // navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+    //   self.asmvideo.src = window.URL.createObjectURL(stream);
+    //   self.asmvideo.play();
+    //   const resolution	= new brfv4.Rectangle(0, 0, 400, 300);
+		// 	const brfManager	= new brfv4.BRFManager();
+		// 	brfManager.init(resolution, resolution, "com.tastenkunst.brfv4.js.examples.minimal.webcam");
+    //   function trackFaces() {
+    //     context.setTransform(-1.0, 0, 0, 1, resolution.width, 0); // mirrored for draw of video
+    //     context.drawImage(self.asmvideo, 0, 0, resolution.width, resolution.height);
+    //     context.setTransform( 1.0, 0, 0, 1, 0, 0); // unmirrored for draw of results
+    //     brfManager.update(context.getImageData(0, 0, resolution.width, resolution.height).data);
+    //     var faces = brfManager.getFaces();
+    //     for(var i = 0; i < faces.length; i++) {
+    //       var face = faces[i];
+    //       if(		face.state === brfv4.BRFState.FACE_TRACKING_START ||
+    //           face.state === brfv4.BRFState.FACE_TRACKING) {
+    //         context.strokeStyle="#00a0ff";
+    //         for(var k = 0; k < face.vertices.length; k += 2) {
+    //           context.beginPath();
+    //           context.arc(face.vertices[k], face.vertices[k + 1], 2, 0, 2 * Math.PI);
+    //           context.stroke();
+    //         }
+    //       }
+    //     }
+    //     requestAnimationFrame(trackFaces);
+    //   }
+    //   trackFaces();
+    // });
+    
    
     this.showPerfermence();
 
