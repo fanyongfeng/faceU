@@ -45,7 +45,7 @@ class Doashboard extends Component {
 
   drawMaskLoop = () => {
     const positions = this.ctracker.getCurrentPosition();
-    this.context.clearRect(0, 0, 400, 400);
+    this.context.clearRect(0, 0, 640, 480);
     if (positions) {
       // draw mask on top of face
       this.fd.draw(positions);
@@ -90,9 +90,9 @@ class Doashboard extends Component {
         <Header>JS_VIDEO__FACE</Header>
         <Content className="flex-col-center">
           <div className="video-wrapper" ref={ref => this.videoWrapper = ref}>
-            <video width="400" height="400" autoPlay ref={ref => this.video = ref} loop playsInline/>
-            <canvas id="drawCanvas" width="400" height="400"></canvas>
-            <canvas id="webgl" width="400" height="400"></canvas>
+            <video width="640" height="480" autoPlay ref={ref => this.video = ref} loop playsInline/>
+            <canvas id="drawCanvas" width="640" height="480"></canvas>
+            <canvas id="webgl" width="640" height="480"></canvas>
           </div>
           <div className="mask-wrapper">
             <img ref={ref => this.monkey = ref} src={monkey} alt=""/>
